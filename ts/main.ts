@@ -11,17 +11,17 @@ $photo?.addEventListener('input', (): void => {
   $imgNew?.setAttribute('src', $photo.value);
 });
 
-const $form = document.querySelector('form');
+const $form = document.querySelector('form') as HTMLFormElement;
+
+interface Values {
+  title: string;
+  photo: string;
+  notes: string;
+  entryId?: number;
+}
 
 $form?.addEventListener('submit', (event: Event) => {
   event.preventDefault();
-
-  interface Values {
-    title: string;
-    photo: string;
-    notes: string;
-    entryId?: number;
-  }
 
   const title = $title.value;
   const photo = $photo.value;
@@ -35,4 +35,7 @@ $form?.addEventListener('submit', (event: Event) => {
 
   values.entryId = data.nextEntryId;
   data.nextEntryId++;
+  data.entries.unshift(values);
+  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+  $form.reset();
 });
