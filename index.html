@@ -26,7 +26,7 @@
       </div>
     </header>
     <main class="container">
-      <div data-view="entry-form">
+      <div data-view="entry-form" class="hidden">
         <form>
           <div class="row">
             <div class="column-full">
@@ -73,7 +73,46 @@
           </div>
         </form>
       </div>
-      <div data-view="entries" class="hidden"></div>
+      <div data-view="entries">
+        <div class="row">
+          <div class="column-full entries-top">
+            <h1>Entries</h1>
+            <div class="a-wrapper">
+              <div class="a-button">
+                <a>NEW</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li>
+            <div class="row">
+              <div class="column-half">
+                <div class="img-entries-wrapper">
+                  <img src="https://picsum.photos/200/300" />
+                </div>
+              </div>
+              <div class="column-half">
+                <h3>A new image</h3>
+                <p>Lorem picsum</p>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="row">
+              <div class="column-half">
+                <div class="img-entries-wrapper">
+                  <img src="https://picsum.photos/200/300" />
+                </div>
+              </div>
+              <div class="column-half">
+                <h3>A new image</h3>
+                <p>Lorem picsum</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </main>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
