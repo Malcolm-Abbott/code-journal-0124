@@ -1,0 +1,60 @@
+body {
+  background-color: rgb(240, 240, 240);
+}
+
+header {
+  background-color: rgb(86, 43, 129);
+  color: #fff;
+}
+
+.img-new-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+img {
+  width: 100%;
+}
+
+.label-wrapper {
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+.input-wrapper {
+  margin-bottom: 2.25rem;
+}
+
+input {
+  width: 100%;
+  min-height: 2.75rem;
+  border-radius: 0.25rem;
+  border-color: lightgray;
+}
+
+.textarea-wrapper {
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 12.5rem;
+  border-radius: 0.25rem;
+  border-color: lightgray;
+}
+
+.flex-button {
+  display: flex;
+  justify-content: end;
+}
+
+.button-new {
+  background-color: rgb(86, 43, 129);
+  color: #fff;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(86, 43, 129);
+  cursor: pointer;
+}
