@@ -37,7 +37,13 @@ $form?.addEventListener('submit', (event: Event) => {
   data.nextEntryId++;
   data.entries.unshift(values);
   $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+
   $form.reset();
+
+  $ul.prepend(renderEntry(values));
+  viewSwap('entries');
+
+  if (data.entries.length > 0) toggleNoEntries();
 });
 
 function renderEntry(entry: Values): HTMLLIElement {
@@ -74,11 +80,16 @@ function renderEntry(entry: Values): HTMLLIElement {
   return $li;
 }
 
+const $ul = document.querySelector('ul') as HTMLUListElement;
+
 document.addEventListener('DOMContentLoaded', (): void => {
-  const $ul = document.querySelector('ul') as HTMLUListElement;
   data.entries.forEach((entry) => {
     $ul.prepend(renderEntry(entry));
   });
+
+  viewSwap(data.view);
+
+  if (data.entries.length > 0) toggleNoEntries();
 });
 
 function toggleNoEntries(): void {
@@ -88,16 +99,14 @@ function toggleNoEntries(): void {
   $noEntries.classList.add('hidden');
 }
 
-toggleNoEntries();
+const $entryForm = document.querySelector(
+  'div[data-view="entry-form"'
+) as HTMLDivElement;
+const $entries = document.querySelector(
+  'div[data-view="entries"]'
+) as HTMLDivElement;
 
 function viewSwap(view: 'entries' | 'entry-form'): void {
-  const $entryForm = document.querySelector(
-    'div[data-view="entry-form"'
-  ) as HTMLDivElement;
-  const $entries = document.querySelector(
-    'div[data-view="entries"]'
-  ) as HTMLDivElement;
-
   if (view === $entryForm.dataset.view) {
     $entryForm.classList.remove('hidden');
     $entries.classList.add('hidden');
@@ -114,7 +123,6 @@ const $entriesAnchor = document.querySelector(
 ) as HTMLAnchorElement;
 
 $entriesAnchor?.addEventListener('click', () => {
-  console.log('fired');
   viewSwap('entries');
 });
 
