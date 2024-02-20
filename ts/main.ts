@@ -48,6 +48,8 @@ $form?.addEventListener('submit', (event: Event) => {
 
 function renderEntry(entry: Values): HTMLLIElement {
   const $li = document.createElement('li') as HTMLLIElement;
+  const dataEntryId = entry.entryId?.toString() || '';
+  $li.setAttribute('data-entry-id', dataEntryId);
 
   const $row = document.createElement('div') as HTMLDivElement;
   $row.className = 'row';
@@ -69,9 +71,21 @@ function renderEntry(entry: Values): HTMLLIElement {
   $colHalf2.className = 'column-half';
   $row.append($colHalf2);
 
+  const $h3Wrapper = document.createElement('div') as HTMLDivElement;
+  $h3Wrapper.className = 'h3-wrapper';
+  $colHalf2.append($h3Wrapper);
+
   const $h3 = document.createElement('h3') as HTMLHeadingElement;
   $h3.textContent = entry.title;
-  $colHalf2.append($h3);
+  $h3Wrapper.append($h3);
+
+  const $iWrapper = document.createElement('div') as HTMLDivElement;
+  $iWrapper.className = 'i-wrapper';
+  $h3Wrapper.append($iWrapper);
+
+  const $i = document.createElement('i') as HTMLElement;
+  $i.className = 'fa-solid fa-pencil';
+  $iWrapper.append($i);
 
   const $p = document.createElement('p') as HTMLParagraphElement;
   $p.textContent = entry.notes;
