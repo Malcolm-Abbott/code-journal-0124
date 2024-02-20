@@ -19,8 +19,11 @@
     <header>
       <div class="container">
         <div class="row">
-          <div class="column-full">
+          <div class="column-full flex-nav">
             <h1>Code Journal</h1>
+            <a class="a-wrapper">
+              <h2>Entries</h2>
+            </a>
           </div>
         </div>
       </div>
@@ -73,7 +76,20 @@
           </div>
         </form>
       </div>
-      <div data-view="entries" class="hidden"></div>
+      <div data-view="entries" class="hidden">
+        <div class="row">
+          <div class="column-full entries-top">
+            <h1>Entries</h1>
+            <div class="a-wrapper">
+              <div class="a-button">
+                <a>NEW</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="no-entries">No entries have been recorded.</p>
+        <ul></ul>
+      </div>
     </main>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
