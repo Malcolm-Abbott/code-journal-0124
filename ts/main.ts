@@ -3,6 +3,9 @@ const $photo = document.querySelector('#photo') as HTMLInputElement;
 const $title = document.querySelector('#title') as HTMLInputElement;
 const $notes = document.querySelector('#notes') as HTMLTextAreaElement;
 const $imgNew = document.querySelector('.img-new') as HTMLImageElement;
+const $newEditEntry = document.querySelector(
+  '.new-edit-entry'
+) as HTMLHeadingElement;
 
 if (!$title) throw new Error('The $title query failed');
 if (!$notes) throw new Error('The $notes query failed');
@@ -136,12 +139,38 @@ const $entriesAnchor = document.querySelector(
   '.a-wrapper'
 ) as HTMLAnchorElement;
 
-$entriesAnchor?.addEventListener('click', () => {
+$entriesAnchor?.addEventListener('click', (): void => {
   viewSwap('entries');
 });
 
 const $entryFormAnchor = document.querySelector('.a-button') as HTMLDivElement;
 
-$entryFormAnchor?.addEventListener('click', () => {
+$entryFormAnchor?.addEventListener('click', (): void => {
   viewSwap('entry-form');
+  $newEditEntry.textContent = 'New Entry';
+});
+
+$ul?.addEventListener('click', (event: Event): void => {
+  const $eventTarget = event?.target as HTMLElement;
+  const $i = document.querySelector('i');
+
+  if ($eventTarget === $i) {
+    viewSwap('entry-form');
+    const $closestLi = $eventTarget?.closest('li') as HTMLLIElement;
+    const $closestLiDataEntryId = $closestLi?.getAttribute('data-entry-id');
+
+    if (!$closestLiDataEntryId)
+      throw new Error('The $closestLiDataEntryId resulted in null');
+
+    data.entries.forEach((entry: Values): void => {
+      if (entry.entryId === +$closestLiDataEntryId) {
+        data.editing = entry;
+        $title.value = data.editing.title;
+        $photo.value = data.editing.photo;
+        $notes.value = data.editing.notes;
+        $imgNew.setAttribute('src', $photo.value);
+        $newEditEntry.textContent = 'Edit Entry';
+      }
+    });
+  }
 });
