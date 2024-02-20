@@ -80,3 +80,46 @@ document.addEventListener('DOMContentLoaded', (): void => {
     $ul.prepend(renderEntry(entry));
   });
 });
+
+function toggleNoEntries(): void {
+  const $noEntries = document.querySelector(
+    '.no-entries'
+  ) as HTMLParagraphElement;
+  $noEntries.classList.add('hidden');
+}
+
+toggleNoEntries();
+
+function viewSwap(view: 'entries' | 'entry-form'): void {
+  const $entryForm = document.querySelector(
+    'div[data-view="entry-form"'
+  ) as HTMLDivElement;
+  const $entries = document.querySelector(
+    'div[data-view="entries"]'
+  ) as HTMLDivElement;
+
+  if (view === $entryForm.dataset.view) {
+    $entryForm.classList.remove('hidden');
+    $entries.classList.add('hidden');
+    data.view = 'entry-form';
+  } else {
+    $entryForm.classList.add('hidden');
+    $entries.classList.remove('hidden');
+    data.view = 'entries';
+  }
+}
+
+const $entriesAnchor = document.querySelector(
+  '.a-wrapper'
+) as HTMLAnchorElement;
+
+$entriesAnchor?.addEventListener('click', () => {
+  console.log('fired');
+  viewSwap('entries');
+});
+
+const $entryFormAnchor = document.querySelector('.a-button') as HTMLDivElement;
+
+$entryFormAnchor?.addEventListener('click', () => {
+  viewSwap('entry-form');
+});
