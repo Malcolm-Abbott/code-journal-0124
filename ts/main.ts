@@ -36,15 +36,30 @@ $form?.addEventListener('submit', (event: Event) => {
     notes,
   };
 
-  values.entryId = data.nextEntryId;
-  data.nextEntryId++;
-  data.entries.unshift(values);
-  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+  if (data.editing === null) {
+    values.entryId = data.nextEntryId;
+    data.nextEntryId++;
+    data.entries.unshift(values);
+    $ul.prepend(renderEntry(values));
+  } else {
+    values.entryId = data.editing.entryId;
 
-  $form.reset();
+    data.entries.forEach((entry: Values): void => {
+      if (entry.entryId === data.editing?.entryId) {
+        if (!data.editing) throw new Error('data.editing is equal to null');
 
-  $ul.prepend(renderEntry(values));
+        data.editing = entry;
+        data.editing.title = $title.value;
+        data.editing.photo = $photo.value;
+        data.editing.notes = $notes.value;
+      }
+    });
+    renderEntry(values);
+  }
+
   viewSwap('entries');
+  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+  $form.reset();
 
   if (data.entries.length > 0) toggleNoEntries();
 });
