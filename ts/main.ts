@@ -166,12 +166,16 @@ const $entriesAnchor = document.querySelector(
 ) as HTMLAnchorElement;
 
 $entriesAnchor?.addEventListener('click', (): void => {
+  $delete.className = 'delete-button hidden';
+  data.editing = null;
   viewSwap('entries');
 });
 
 const $entryFormAnchor = document.querySelector('.a-button') as HTMLDivElement;
 
 $entryFormAnchor?.addEventListener('click', (): void => {
+  $form.reset();
+  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
   viewSwap('entry-form');
   $newEditEntry.textContent = 'New Entry';
 });
@@ -203,3 +207,18 @@ $ul?.addEventListener('click', (event: Event): void => {
     });
   }
 });
+
+const $modal = document.querySelector('dialog') as HTMLDialogElement;
+
+$delete?.addEventListener('click', () => {
+  $modal.showModal();
+});
+
+const $cancel = document.querySelector('.cancel') as HTMLButtonElement;
+const $confirm = document.querySelector('.confirm') as HTMLButtonElement;
+
+$cancel?.addEventListener('click', () => {
+  $modal.close();
+});
+
+$confirm?.addEventListener('click', () => {});

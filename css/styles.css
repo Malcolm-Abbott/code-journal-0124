@@ -131,3 +131,31 @@ li {
 .fa-pencil {
   color: rgb(86, 43, 129);
 }
+
+dialog {
+  border: 1px solid #fff;
+  border-radius: 0.25rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.cancel {
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 0.25rem;
+  background-color: rgb(182, 182, 182);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.confirm {
+  border: 1px solid rgb(220, 38, 38);
+  border-radius: 0.25rem;
+  background-color: rgb(220, 38, 38);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
