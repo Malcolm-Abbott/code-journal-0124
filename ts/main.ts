@@ -65,6 +65,7 @@ $form?.addEventListener('submit', (event: Event) => {
 
     $newEditEntry.textContent = 'New Entry';
     data.editing = null;
+    $delete.className = 'delete-button hidden';
   }
 
   viewSwap('entries');
@@ -175,12 +176,15 @@ $entryFormAnchor?.addEventListener('click', (): void => {
   $newEditEntry.textContent = 'New Entry';
 });
 
+const $delete = document.querySelector('.delete-button') as HTMLButtonElement;
+
 $ul?.addEventListener('click', (event: Event): void => {
   const $eventTarget = event?.target as HTMLElement;
   const $i = document.querySelector('i');
 
   if ($eventTarget === $i) {
     viewSwap('entry-form');
+    $delete.className = 'delete-button';
     const $closestLi = $eventTarget?.closest('li') as HTMLLIElement;
     const $closestLiDataEntryId = $closestLi?.getAttribute('data-entry-id');
 

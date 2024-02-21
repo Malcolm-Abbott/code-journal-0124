@@ -63,7 +63,14 @@ textarea {
 
 .flex-button {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+}
+
+.delete-button {
+  border: none;
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .button-new {
