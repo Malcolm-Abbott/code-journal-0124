@@ -72,7 +72,7 @@ $form?.addEventListener('submit', (event: Event) => {
   $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
   $form.reset();
 
-  if (data.entries.length > 0) toggleNoEntries();
+  toggleNoEntries();
 });
 
 function renderEntry(entry: Values): HTMLLIElement {
@@ -132,14 +132,18 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   viewSwap(data.view);
 
-  if (data.entries.length > 0) toggleNoEntries();
+  toggleNoEntries();
 });
 
 function toggleNoEntries(): void {
   const $noEntries = document.querySelector(
     '.no-entries'
   ) as HTMLParagraphElement;
-  $noEntries.classList.add('hidden');
+  if (data.entries.length === 0) {
+    $noEntries.className = 'no-entries';
+  } else {
+    $noEntries.className = 'no-entries hidden';
+  }
 }
 
 const $entryForm = document.querySelector(
@@ -178,15 +182,15 @@ $entryFormAnchor?.addEventListener('click', (): void => {
   $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
   viewSwap('entry-form');
   $newEditEntry.textContent = 'New Entry';
+  $delete.className = 'delete-button hidden';
 });
 
 const $delete = document.querySelector('.delete-button') as HTMLButtonElement;
 
 $ul?.addEventListener('click', (event: Event): void => {
   const $eventTarget = event?.target as HTMLElement;
-  const $i = document.querySelector('i');
 
-  if ($eventTarget === $i) {
+  if ($eventTarget.matches('i')) {
     viewSwap('entry-form');
     $delete.className = 'delete-button';
     const $closestLi = $eventTarget?.closest('li') as HTMLLIElement;
@@ -229,6 +233,21 @@ $confirm?.addEventListener('click', () => {
       dataEntries.push(data.entries[i]);
     }
   }
+
+  const $liNodeList = document.querySelectorAll(
+    'li'
+  ) as NodeListOf<HTMLLIElement>;
+
+  $liNodeList.forEach((node) => {
+    if (
+      node.getAttribute('data-entry-id') === data.editing?.entryId?.toString()
+    )
+      node.remove();
+  });
+
   data.entries = dataEntries;
   $modal.close();
+  viewSwap('entries');
+  toggleNoEntries();
+  data.editing = null;
 });
