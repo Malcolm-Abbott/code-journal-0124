@@ -109,3 +109,18 @@ ul {
 li {
   list-style: none;
 }
+
+.h3-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.i-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fa-pencil {
+  color: rgb(86, 43, 129);
+}

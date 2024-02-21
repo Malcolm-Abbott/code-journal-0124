@@ -3,6 +3,9 @@ const $photo = document.querySelector('#photo') as HTMLInputElement;
 const $title = document.querySelector('#title') as HTMLInputElement;
 const $notes = document.querySelector('#notes') as HTMLTextAreaElement;
 const $imgNew = document.querySelector('.img-new') as HTMLImageElement;
+const $newEditEntry = document.querySelector(
+  '.new-edit-entry'
+) as HTMLHeadingElement;
 
 if (!$title) throw new Error('The $title query failed');
 if (!$notes) throw new Error('The $notes query failed');
@@ -33,21 +36,48 @@ $form?.addEventListener('submit', (event: Event) => {
     notes,
   };
 
-  values.entryId = data.nextEntryId;
-  data.nextEntryId++;
-  data.entries.unshift(values);
-  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+  if (data.editing === null) {
+    values.entryId = data.nextEntryId;
+    data.nextEntryId++;
+    data.entries.unshift(values);
+    $ul.prepend(renderEntry(values));
+  } else {
+    values.entryId = data.editing.entryId;
 
-  $form.reset();
+    for (let i = 0; i < data.entries.length; i++) {
+      if (data.entries[i].entryId === data.editing?.entryId) {
+        data.entries[i] = values;
+      }
+    }
 
-  $ul.prepend(renderEntry(values));
+    const $liNodeList = document.querySelectorAll(
+      'li'
+    ) as NodeListOf<HTMLLIElement>;
+
+    $liNodeList.forEach((node: HTMLLIElement): void => {
+      if (
+        (node.getAttribute('data-entry-id') as string) ===
+        data.editing?.entryId?.toString()
+      ) {
+        node.replaceWith(renderEntry(values));
+      }
+    });
+
+    $newEditEntry.textContent = 'New Entry';
+    data.editing = null;
+  }
+
   viewSwap('entries');
+  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
+  $form.reset();
 
   if (data.entries.length > 0) toggleNoEntries();
 });
 
 function renderEntry(entry: Values): HTMLLIElement {
   const $li = document.createElement('li') as HTMLLIElement;
+  const dataEntryId = entry.entryId?.toString() || '';
+  $li.setAttribute('data-entry-id', dataEntryId);
 
   const $row = document.createElement('div') as HTMLDivElement;
   $row.className = 'row';
@@ -69,9 +99,21 @@ function renderEntry(entry: Values): HTMLLIElement {
   $colHalf2.className = 'column-half';
   $row.append($colHalf2);
 
+  const $h3Wrapper = document.createElement('div') as HTMLDivElement;
+  $h3Wrapper.className = 'h3-wrapper';
+  $colHalf2.append($h3Wrapper);
+
   const $h3 = document.createElement('h3') as HTMLHeadingElement;
   $h3.textContent = entry.title;
-  $colHalf2.append($h3);
+  $h3Wrapper.append($h3);
+
+  const $iWrapper = document.createElement('div') as HTMLDivElement;
+  $iWrapper.className = 'i-wrapper';
+  $h3Wrapper.append($iWrapper);
+
+  const $i = document.createElement('i') as HTMLElement;
+  $i.className = 'fa-solid fa-pencil';
+  $iWrapper.append($i);
 
   const $p = document.createElement('p') as HTMLParagraphElement;
   $p.textContent = entry.notes;
@@ -122,12 +164,38 @@ const $entriesAnchor = document.querySelector(
   '.a-wrapper'
 ) as HTMLAnchorElement;
 
-$entriesAnchor?.addEventListener('click', () => {
+$entriesAnchor?.addEventListener('click', (): void => {
   viewSwap('entries');
 });
 
 const $entryFormAnchor = document.querySelector('.a-button') as HTMLDivElement;
 
-$entryFormAnchor?.addEventListener('click', () => {
+$entryFormAnchor?.addEventListener('click', (): void => {
   viewSwap('entry-form');
+  $newEditEntry.textContent = 'New Entry';
+});
+
+$ul?.addEventListener('click', (event: Event): void => {
+  const $eventTarget = event?.target as HTMLElement;
+  const $i = document.querySelector('i');
+
+  if ($eventTarget === $i) {
+    viewSwap('entry-form');
+    const $closestLi = $eventTarget?.closest('li') as HTMLLIElement;
+    const $closestLiDataEntryId = $closestLi?.getAttribute('data-entry-id');
+
+    if (!$closestLiDataEntryId)
+      throw new Error('The $closestLiDataEntryId resulted in null');
+
+    data.entries.forEach((entry: Values): void => {
+      if (entry.entryId === +$closestLiDataEntryId) {
+        data.editing = entry;
+        $title.value = data.editing.title;
+        $photo.value = data.editing.photo;
+        $notes.value = data.editing.notes;
+        $imgNew.setAttribute('src', $photo.value);
+        $newEditEntry.textContent = 'Edit Entry';
+      }
+    });
+  }
 });
