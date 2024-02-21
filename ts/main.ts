@@ -44,17 +44,27 @@ $form?.addEventListener('submit', (event: Event) => {
   } else {
     values.entryId = data.editing.entryId;
 
-    data.entries.forEach((entry: Values): void => {
-      if (entry.entryId === data.editing?.entryId) {
-        if (!data.editing) throw new Error('data.editing is equal to null');
+    for (let i = 0; i < data.entries.length; i++) {
+      if (data.entries[i].entryId === data.editing?.entryId) {
+        data.entries[i] = values;
+      }
+    }
 
-        data.editing = entry;
-        data.editing.title = $title.value;
-        data.editing.photo = $photo.value;
-        data.editing.notes = $notes.value;
+    const $liNodeList = document.querySelectorAll(
+      'li'
+    ) as NodeListOf<HTMLLIElement>;
+
+    $liNodeList.forEach((node: HTMLLIElement): void => {
+      if (
+        (node.getAttribute('data-entry-id') as string) ===
+        data.editing?.entryId?.toString()
+      ) {
+        node.replaceWith(renderEntry(values));
       }
     });
-    renderEntry(values);
+
+    $newEditEntry.textContent = 'New Entry';
+    data.editing = null;
   }
 
   viewSwap('entries');
