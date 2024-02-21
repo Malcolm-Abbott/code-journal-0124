@@ -221,4 +221,14 @@ $cancel?.addEventListener('click', () => {
   $modal.close();
 });
 
-$confirm?.addEventListener('click', () => {});
+$confirm?.addEventListener('click', () => {
+  const dataEntries: Values[] = [];
+
+  for (let i = 0; i < data.entries.length; i++) {
+    if (data.entries[i].entryId !== data.editing?.entryId) {
+      dataEntries.push(data.entries[i]);
+    }
+  }
+  data.entries = dataEntries;
+  $modal.close();
+});
