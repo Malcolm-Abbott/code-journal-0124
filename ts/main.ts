@@ -65,13 +65,14 @@ $form?.addEventListener('submit', (event: Event) => {
 
     $newEditEntry.textContent = 'New Entry';
     data.editing = null;
+    $delete.className = 'delete-button hidden';
   }
 
   viewSwap('entries');
   $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
   $form.reset();
 
-  if (data.entries.length > 0) toggleNoEntries();
+  toggleNoEntries();
 });
 
 function renderEntry(entry: Values): HTMLLIElement {
@@ -131,14 +132,18 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
   viewSwap(data.view);
 
-  if (data.entries.length > 0) toggleNoEntries();
+  toggleNoEntries();
 });
 
 function toggleNoEntries(): void {
   const $noEntries = document.querySelector(
     '.no-entries'
   ) as HTMLParagraphElement;
-  $noEntries.classList.add('hidden');
+  if (data.entries.length === 0) {
+    $noEntries.className = 'no-entries';
+  } else {
+    $noEntries.className = 'no-entries hidden';
+  }
 }
 
 const $entryForm = document.querySelector(
@@ -165,22 +170,29 @@ const $entriesAnchor = document.querySelector(
 ) as HTMLAnchorElement;
 
 $entriesAnchor?.addEventListener('click', (): void => {
+  $delete.className = 'delete-button hidden';
+  data.editing = null;
   viewSwap('entries');
 });
 
 const $entryFormAnchor = document.querySelector('.a-button') as HTMLDivElement;
 
 $entryFormAnchor?.addEventListener('click', (): void => {
+  $form.reset();
+  $imgNew.setAttribute('src', '../images/placeholder-image-square.jpg');
   viewSwap('entry-form');
   $newEditEntry.textContent = 'New Entry';
+  $delete.className = 'delete-button hidden';
 });
+
+const $delete = document.querySelector('.delete-button') as HTMLButtonElement;
 
 $ul?.addEventListener('click', (event: Event): void => {
   const $eventTarget = event?.target as HTMLElement;
-  const $i = document.querySelector('i');
 
-  if ($eventTarget === $i) {
+  if ($eventTarget.matches('i')) {
     viewSwap('entry-form');
+    $delete.className = 'delete-button';
     const $closestLi = $eventTarget?.closest('li') as HTMLLIElement;
     const $closestLiDataEntryId = $closestLi?.getAttribute('data-entry-id');
 
@@ -198,4 +210,44 @@ $ul?.addEventListener('click', (event: Event): void => {
       }
     });
   }
+});
+
+const $modal = document.querySelector('dialog') as HTMLDialogElement;
+
+$delete?.addEventListener('click', () => {
+  $modal.showModal();
+});
+
+const $cancel = document.querySelector('.cancel') as HTMLButtonElement;
+const $confirm = document.querySelector('.confirm') as HTMLButtonElement;
+
+$cancel?.addEventListener('click', () => {
+  $modal.close();
+});
+
+$confirm?.addEventListener('click', () => {
+  const dataEntries: Values[] = [];
+
+  for (let i = 0; i < data.entries.length; i++) {
+    if (data.entries[i].entryId !== data.editing?.entryId) {
+      dataEntries.push(data.entries[i]);
+    }
+  }
+
+  const $liNodeList = document.querySelectorAll(
+    'li'
+  ) as NodeListOf<HTMLLIElement>;
+
+  $liNodeList.forEach((node) => {
+    if (
+      node.getAttribute('data-entry-id') === data.editing?.entryId?.toString()
+    )
+      node.remove();
+  });
+
+  data.entries = dataEntries;
+  $modal.close();
+  viewSwap('entries');
+  toggleNoEntries();
+  data.editing = null;
 });
